@@ -1,0 +1,20 @@
+
+type Habit {
+  id: ID
+  title: String!
+  currentSreak: Int
+  longestStreak: Int
+  user: User
+}
+
+type User {
+  id: ID
+  name: String
+  email: String! @unique
+  habits: [Habit] @relation
+}
+
+type Query {
+  users: [User]
+  habits: [Habit]
+}
