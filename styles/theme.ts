@@ -1,13 +1,14 @@
 import { Colors, extendTheme } from "@chakra-ui/react";
 
 const colors: Colors = {
-    imperialRed: '#E63946',
-    prussianBlue: '#1D3557',
-    celadonBlue: '#457B9D',
-    powderBlue: '#A8DADC',
-    honeyDew: '#f1faee',
-    white: '#F6F7FB'
-}
+  imperialRed: "#E63946",
+  prussianBlue: "#031f99",
+  celadonBlue: "#251347",
+  powderBlue: "#A8DADC",
+  honeyDew: "#f1faee",
+  horizon: "#C3BDE0",
+  white: "#F6F7FB",
+};
 // brand: {
 //     900: "#E63946",
 //     800: "#1D3557",
@@ -18,12 +19,16 @@ const colors: Colors = {
 //   },
 
 const fonts = {
-    body: '"DM Sans", sans-serif',
-    heading: '"DM Sans", sans-serif',
-}
+  body: "Poppins, sans-serif",
+  heading: "Poppins, sans-serif",
+};
 
 export const theme = extendTheme({
-    colors,
-    fonts,
-    
-})
+  colors,
+  fonts,
+});
+
+export const primaryButtonStates = {
+  bg: colors.celadonBlue as string,
+  color: "white",
+};
