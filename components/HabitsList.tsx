@@ -3,25 +3,46 @@ import useSWR from "swr";
 import Habit from "./Habit";
 import { fetcher } from "../lib/fetcher";
 import { HabitsResponse } from "../types/graphql";
-import { HABITS_QUERY } from "../graphql/queries";
 import Error from "./Error";
+import EditHabit from "./EditHabit";
+import { useCallback, useState } from "react";
+import { Habit as HabitType } from "../types/habit";
 
 function HabitsList() {
-  const { data, error } = useSWR<HabitsResponse>(
-    "habits",
-    () => fetcher(HABITS_QUERY),
-    {
-      suspense: true,
-    }
+  const { data, error } = useSWR<HabitsResponse>("/api/habits", fetcher, {
+    suspense: true,
+  });
+
+  const [selectedHabit, selectHabit] = useState<HabitType | undefined>(
+    undefined
   );
 
-  if (error || data?.errors) return <Error error={error || data} />;
+  const close = () => selectHabit(undefined);
+
+  const editHabit = useCallback((title) => {
+    console.log(title);
+  }, []);
+
+  if (error || data?.code) return <Error error={error || data} />;
+
+  const habits = data;
 
   return (
     <Box py="5" borderBottom="1px solid" borderColor="horizon">
-      {data?.data?.habits?.data?.map((habit) => (
-        <Habit key={habit._id} habit={habit} />
+      {habits?.map((habit) => (
+        <Habit
+          key={habit.id}
+          onSelect={() => selectHabit(habit)}
+          habit={habit}
+        />
       ))}
+      <EditHabit
+        editHabit={editHabit}
+        isOpen={Boolean(selectedHabit)}
+        close={close}
+        habit={selectedHabit}
+        size="sm"
+      />
     </Box>
   );
 }

@@ -1,10 +1,10 @@
-
 type Habit {
   id: ID
   title: String!
   currentSreak: Int
   longestStreak: Int
   user: User
+  lastTrackedAt: Date
 }
 
 type User {

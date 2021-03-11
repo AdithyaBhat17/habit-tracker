@@ -2,17 +2,22 @@ import { Flex, Stack, Text, Button } from "@chakra-ui/react";
 import React from "react";
 import { primaryButtonStates } from "../styles/theme";
 import { Habit as HabitType } from "../types/habit";
+import PrimaryButton from "./Buttons/PrimaryButton";
 import StreakTag from "./StreakTag";
 
 interface HabitProps {
   habit: HabitType;
+  onSelect: () => void;
 }
 
-function Habit({ habit }: HabitProps) {
+function Habit({ habit, onSelect }: HabitProps) {
+  console.log(habit.currentStreak);
+
   return (
     <Flex
       cursor="pointer"
-      key={habit._id}
+      onClick={onSelect}
+      key={habit.id}
       justifyContent="space-between"
       alignItems="center"
     >
@@ -25,17 +30,9 @@ function Habit({ habit }: HabitProps) {
         >
           {habit.title}
         </Text>
-        <StreakTag currentStreak={habit.currentSreak} />
+        <StreakTag currentStreak={habit.currentStreak} />
       </Stack>
-      <Button
-        _hover={primaryButtonStates}
-        _focus={primaryButtonStates}
-        _active={primaryButtonStates}
-        color="white"
-        bg="prussianBlue"
-      >
-        Track
-      </Button>
+      <PrimaryButton>Track</PrimaryButton>
     </Flex>
   );
 }

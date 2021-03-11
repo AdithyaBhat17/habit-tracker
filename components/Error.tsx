@@ -1,13 +1,9 @@
 import { Flex, Heading, Text } from "@chakra-ui/layout";
 
-type ErrorMessage = {
-  message?: string;
-};
-
 interface ErrorProps {
   error: {
     message: string;
-    errors: ErrorMessage[];
+    code: string;
   };
 }
 
@@ -23,9 +19,7 @@ function Error({ error }: ErrorProps) {
         💩
       </Heading>
       <Text color="imperialRed">
-        {error?.message ||
-          error?.errors[0]?.message ||
-          "Oops... Something went wrong 😢"}
+        {error?.message || error?.code || "Oops... Something went wrong 😢"}
       </Text>
     </Flex>
   );
