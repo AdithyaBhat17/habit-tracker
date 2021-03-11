@@ -6,7 +6,7 @@ export type Habit = {
     name: string;
     email: string;
   };
-  currentSreak: number;
+  currentStreak: number;
   longestStreak: number;
 };
 
