@@ -1,6 +1,5 @@
-import { Flex, Stack, Text, Button } from "@chakra-ui/react";
+import { Flex, Stack, Text } from "@chakra-ui/react";
 import React from "react";
-import { primaryButtonStates } from "../styles/theme";
 import { Habit as HabitType } from "../types/habit";
 import PrimaryButton from "./Buttons/PrimaryButton";
 import StreakTag from "./StreakTag";

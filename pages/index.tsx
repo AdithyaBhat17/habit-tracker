@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import AddHabit from "../components/AddHabit";
 import HabitsList from "../components/HabitsList";
 import Loading from "../components/Loading";
-import ErrorBoundary from "../components/Error";
 
 function getFormattedDate() {
   return new Intl.DateTimeFormat("en-GB", {
