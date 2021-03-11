@@ -3,7 +3,7 @@ import { Colors, extendTheme } from "@chakra-ui/react";
 const colors: Colors = {
   imperialRed: "#E63946",
   prussianBlue: "#031f99",
-  celadonBlue: "#251347",
+  celadonBlue: "#2453c6",
   powderBlue: "#A8DADC",
   honeyDew: "#f1faee",
   horizon: "#C3BDE0",

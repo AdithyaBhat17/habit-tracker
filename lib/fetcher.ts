@@ -1,27 +1,18 @@
-import { Variables } from "../types/graphql";
-
-const API_KEY = process.env.NEXT_PUBLIC_FAUNADB_SECRET;
-const API_URL = process.env.NEXT_PUBLIC_FAUNADB_GRAPHQL_ENDPOINT || "";
-
 export async function fetcher<ApiResponse>(
-  query: string,
-  variables?: Variables,
-  options: HeadersInit = {},
-  includeAuthHeaders = true
+  url: string,
+  token?: string = "",
+  body?: any
 ): Promise<ApiResponse | any> {
   try {
-    const r = await fetch(API_URL, {
+    const r = await fetch(url, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
         Accept: "application/json",
-        Authorization: includeAuthHeaders ? `Bearer ${API_KEY}` : "",
-        ...options,
+        token,
       },
-      body: JSON.stringify({
-        query,
-        variables,
-      }),
+      credentials: "same-origin",
+      body: JSON.stringify(body),
     });
     return await r.json();
   } catch (e) {
