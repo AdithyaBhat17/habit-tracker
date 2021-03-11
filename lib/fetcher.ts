@@ -1,6 +1,6 @@
 export async function fetcher<ApiResponse>(
   url: string,
-  token?: string = "",
+  token: string = "",
   body?: any
 ): Promise<ApiResponse | any> {
   try {

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { supabase } from "../../lib/supabase";
 
 export default async function habits(
-  req: NextApiRequest,
+  _req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
