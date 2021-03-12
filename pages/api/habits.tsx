@@ -8,7 +8,7 @@ export default async function habits(
   try {
     let { data: habits, error } = await supabase
       .from("habits")
-      .select("id, title, currentStreak, longestStreak");
+      .select("id, title, currentStreak, longestStreak, lastTrackedDate");
 
     if (error) {
       return res.status(Number(error.code)).json({ message: error.message });

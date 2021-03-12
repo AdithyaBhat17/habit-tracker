@@ -7,6 +7,7 @@ export type HabitsResponse = {
 } & {
   id: string;
   title: string;
+  lastTrackedDate: string;
   user: {
     _id: string;
     name: string;

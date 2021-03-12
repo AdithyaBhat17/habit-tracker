@@ -10,13 +10,14 @@ interface HabitProps {
 }
 
 function Habit({ habit, onSelect }: HabitProps) {
-  console.log(habit.currentStreak);
-
   return (
     <Flex
       cursor="pointer"
       onClick={onSelect}
       key={habit.id}
+      py="5"
+      borderBottom="1px solid"
+      borderColor="horizon"
       justifyContent="space-between"
       alignItems="center"
     >
