@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/layout";
+import { Box, Flex } from "@chakra-ui/layout";
 import useSWR from "swr";
 import Habit from "./Habit";
 import { fetcher } from "../lib/fetcher";
@@ -9,9 +9,13 @@ import { useCallback, useState } from "react";
 import { Habit as HabitType } from "../types/habit";
 
 function HabitsList() {
-  const { data, error } = useSWR<HabitsResponse>("/api/habits", fetcher, {
-    suspense: true,
-  });
+  const { data, error } = useSWR<HabitsResponse>(
+    "/api/habits",
+    (url) => fetcher({ url, method: "GET" }),
+    {
+      suspense: true,
+    }
+  );
 
   const [selectedHabit, selectHabit] = useState<HabitType | undefined>(
     undefined
@@ -28,14 +32,19 @@ function HabitsList() {
   const habits = data;
 
   return (
-    <Box py="5" borderBottom="1px solid" borderColor="horizon">
-      {habits?.map((habit) => (
-        <Habit
-          key={habit.id}
-          onSelect={() => selectHabit(habit)}
-          habit={habit}
-        />
-      ))}
+    <Box>
+      {habits
+        ?.sort(
+          (a, b) =>
+            Date.parse(b.lastTrackedDate) - Date.parse(a.lastTrackedDate)
+        )
+        .map((habit) => (
+          <Habit
+            key={habit.id}
+            onSelect={() => selectHabit(habit)}
+            habit={habit}
+          />
+        ))}
       <EditHabit
         editHabit={editHabit}
         isOpen={Boolean(selectedHabit)}
@@ -43,6 +52,16 @@ function HabitsList() {
         habit={selectedHabit}
         size="sm"
       />
+      {habits?.length === 0 ? (
+        <Flex
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          height="60vh"
+        >
+          No habits found
+        </Flex>
+      ) : null}
     </Box>
   );
 }
