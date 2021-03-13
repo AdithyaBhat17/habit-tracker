@@ -26,4 +26,5 @@ export interface EditHabitProps {
     | "6xl"
     | "full";
   habit?: Habit;
+  user?: string;
 }

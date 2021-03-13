@@ -8,10 +8,10 @@ import EditHabit from "./EditHabit";
 import { useState } from "react";
 import { Habit as HabitType } from "../types/habit";
 
-function HabitsList() {
+function HabitsList({ user }: { user?: string }) {
   const { data, error } = useSWR<HabitsResponse>(
     "/api/habits",
-    (url) => fetcher({ url, method: "GET" }),
+    !user ? null : (url) => fetcher({ url, method: "GET", token: user }),
     {
       suspense: true,
     }
@@ -27,10 +27,12 @@ function HabitsList() {
 
   const habits = data;
 
+  const isOpen = Boolean(selectedHabit);
+
   return (
-    <Box>
+    <Box my="5">
       {habits
-        ?.sort(
+        ?.sort?.(
           (a, b) =>
             Date.parse(b.lastTrackedDate) - Date.parse(a.lastTrackedDate)
         )
@@ -42,12 +44,13 @@ function HabitsList() {
           />
         ))}
       <EditHabit
-        isOpen={Boolean(selectedHabit)}
+        isOpen={isOpen}
+        user={user}
         close={close}
         habit={selectedHabit}
         size="sm"
       />
-      {habits?.length === 0 ? (
+      {!habits?.length ? (
         <Flex
           direction="column"
           justifyContent="center"

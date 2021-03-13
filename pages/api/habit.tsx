@@ -1,13 +1,20 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../lib/supabase-admin";
 
 export default async function habit(req: NextApiRequest, res: NextApiResponse) {
+  const user_id = req.headers.token as string;
+
+  if (!user_id) {
+    return res.status(401).json({
+      message: "You are not authorized to perform this action.",
+    });
+  }
+
   if (req.method === "POST") {
-    // @todo - Verify user before adding habit using token.
     const { data, error } = await supabase.from("habits").insert([
       {
         title: req.body.title,
-        user_id: "62ac2f91-e1a2-40a8-bb40-508f58c41134",
+        user_id,
       },
     ]);
 
@@ -27,7 +34,7 @@ export default async function habit(req: NextApiRequest, res: NextApiResponse) {
         returning: "representation",
         count: "exact",
       })
-      .match({ id: req.body.habit_id });
+      .match({ id: req.body.habit_id, user_id });
 
     if (error) {
       return res.status(400).json(error);
@@ -70,10 +77,9 @@ export default async function habit(req: NextApiRequest, res: NextApiResponse) {
         longestStreak,
         lastTrackedDate,
       })
-      // @todo - Update habit only if user.id === habit.user_id
       .match({
         id: req.body.habit_id,
-        user_id: "62ac2f91-e1a2-40a8-bb40-508f58c41134",
+        user_id,
       });
 
     if (error) {
