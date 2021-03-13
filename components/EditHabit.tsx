@@ -11,25 +11,70 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/modal";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import OutlineButton from "./Buttons/OutlineButton";
 import PrimaryButton from "./Buttons/PrimaryButton";
-import { EditHabitProps } from "../types/habit";
+import { EditHabitProps, Habit } from "../types/habit";
+import { useToast } from "@chakra-ui/toast";
+import { mutate } from "swr";
+import { deleteHabit, editHabitTitle } from "../utils/habit";
+import { FormControl, FormHelperText } from "@chakra-ui/form-control";
 
-function EditHabit({ isOpen, close, size, habit, editHabit }: EditHabitProps) {
+function EditHabit({ isOpen, close, size, habit }: EditHabitProps) {
+  const [error, setError] = useState("");
+  const [status, setStatus] = useState<
+    "idle" | "updating" | "deleting" | "error"
+  >("idle");
   const [isNotMobile] = useMediaQuery("(min-width:500px)");
+  const outlineButton = useRef<HTMLButtonElement>();
 
   let [title, setTitle] = useState("");
+
+  const toast = useToast();
 
   useEffect(() => {
     if (habit) setTitle(habit.title);
   }, [habit]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (error) setError(""); // reset error once the user starts typing.
     setTitle(event.target.value);
   };
 
-  const updateHabit = () => editHabit(title);
+  const updateHabit = (event?: FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+    if (!title.trim().length) {
+      setError("Nice try, genius 😒");
+      return;
+    }
+    mutate(
+      "/api/habits",
+      async (habits: Habit[]) => {
+        setStatus("updating");
+        return await editHabitTitle(
+          title,
+          habit,
+          habits,
+          toast,
+          setStatus,
+          close
+        );
+      },
+      false
+    );
+  };
+
+  const handleDelete = () => {
+    if (!habit) return;
+    mutate(
+      "/api/habits",
+      async (habits: Habit[]) => {
+        setStatus("deleting");
+        return await deleteHabit(habit, habits, toast, close, setStatus);
+      },
+      false
+    );
+  };
 
   return (
     <Modal size={size} isOpen={isOpen} onClose={close} isCentered>
@@ -49,11 +94,18 @@ function EditHabit({ isOpen, close, size, habit, editHabit }: EditHabitProps) {
           />
         </Flex>
         <ModalBody>
-          <Input
-            onChange={handleChange}
-            background="white"
-            defaultValue={title}
-          />
+          <form action="POST" onSubmit={updateHabit}>
+            <FormControl>
+              <Input
+                onChange={handleChange}
+                background="white"
+                isRequired
+                disabled={status !== "idle"}
+                defaultValue={title}
+              />
+              <FormHelperText color="imperialRed">{error}</FormHelperText>
+            </FormControl>
+          </form>
           <Grid gap="5" gridTemplateColumns="1fr 1fr" mt="10" mb="5">
             <Flex
               direction="column"
@@ -85,8 +137,22 @@ function EditHabit({ isOpen, close, size, habit, editHabit }: EditHabitProps) {
         </ModalBody>
         <ModalFooter>
           <Grid gap="5" gridTemplateColumns="1fr 1fr" width="100%">
-            <OutlineButton isFullWidth>Delete</OutlineButton>
-            <PrimaryButton onClick={updateHabit} isFullWidth bg="blue.500">
+            <OutlineButton
+              ref={outlineButton}
+              onClick={handleDelete}
+              isDisabled={status !== "idle"}
+              isLoading={status === "deleting"}
+              isFullWidth
+            >
+              Delete
+            </OutlineButton>
+            <PrimaryButton
+              isDisabled={status !== "idle"}
+              isLoading={status === "updating"}
+              onClick={updateHabit}
+              isFullWidth
+              bg="blue.500"
+            >
               Save
             </PrimaryButton>
           </Grid>
