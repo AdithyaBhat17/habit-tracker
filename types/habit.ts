@@ -26,5 +26,4 @@ export interface EditHabitProps {
     | "6xl"
     | "full";
   habit?: Habit;
-  editHabit: (title: string) => void;
 }
