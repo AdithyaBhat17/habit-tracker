@@ -9,7 +9,8 @@ A simple habit tracker built for my personal use.
 - [x] Design arch ✔️
 - [x] Design wireframes and schema ✔️
 - [x] Setup Fauna DB ✔️
-- [ ] Build the UI layout 🚧
-- [ ] Integrate with FaunaDB using GraphQL over HTTP 🚧
-- [ ] Add authentication and RBAC.
+- [x] Build the UI layout ✔️
+- [x] Integrate with Supabase ✔️ 
+- [x] Add authentication and RBAC. ✔️
+- [x] Complete Tracking habits logic. 🚧
 
