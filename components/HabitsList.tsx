@@ -5,7 +5,7 @@ import { fetcher } from "../lib/fetcher";
 import { HabitsResponse } from "../types/graphql";
 import Error from "./Error";
 import EditHabit from "./EditHabit";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Habit as HabitType } from "../types/habit";
 
 function HabitsList() {
@@ -22,10 +22,6 @@ function HabitsList() {
   );
 
   const close = () => selectHabit(undefined);
-
-  const editHabit = useCallback((title) => {
-    console.log(title);
-  }, []);
 
   if (error || data?.code) return <Error error={error || data} />;
 
@@ -46,7 +42,6 @@ function HabitsList() {
           />
         ))}
       <EditHabit
-        editHabit={editHabit}
         isOpen={Boolean(selectedHabit)}
         close={close}
         habit={selectedHabit}
