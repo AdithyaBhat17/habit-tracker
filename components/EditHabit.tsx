@@ -20,7 +20,7 @@ import { mutate } from "swr";
 import { deleteHabit, editHabitTitle } from "../utils/habit";
 import { FormControl, FormHelperText } from "@chakra-ui/form-control";
 
-function EditHabit({ isOpen, close, size, habit }: EditHabitProps) {
+function EditHabit({ isOpen, close, size, habit, user = "" }: EditHabitProps) {
   const [error, setError] = useState("");
   const [status, setStatus] = useState<
     "idle" | "updating" | "deleting" | "error"
@@ -56,6 +56,7 @@ function EditHabit({ isOpen, close, size, habit }: EditHabitProps) {
           habit,
           habits,
           toast,
+          user,
           setStatus,
           close
         );
@@ -70,7 +71,7 @@ function EditHabit({ isOpen, close, size, habit }: EditHabitProps) {
       "/api/habits",
       async (habits: Habit[]) => {
         setStatus("deleting");
-        return await deleteHabit(habit, habits, toast, close, setStatus);
+        return await deleteHabit(habit, habits, toast, user, close, setStatus);
       },
       false
     );

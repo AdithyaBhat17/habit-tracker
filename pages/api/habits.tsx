@@ -1,14 +1,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../lib/supabase-admin";
 
 export default async function habits(
-  _req: NextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const user_id = req.headers.token as string;
+  if (!user_id) {
+    return res.status(401).json({ message: "Failed to fetch habits" });
+  }
   try {
     let { data: habits, error } = await supabase
       .from("habits")
-      .select("id, title, currentStreak, longestStreak, lastTrackedDate");
+      .select("id, title, currentStreak, longestStreak, lastTrackedDate")
+      .match({ user_id });
 
     if (error) {
       return res.status(Number(error.code)).json({ message: error.message });

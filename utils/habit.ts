@@ -6,6 +6,7 @@ export async function deleteHabit(
   habit: Habit,
   habits: Habit[],
   toast: any,
+  token: string,
   close: () => void,
   setStatus: Dispatch<
     SetStateAction<"error" | "idle" | "updating" | "deleting">
@@ -14,6 +15,7 @@ export async function deleteHabit(
   const data = await fetcher({
     url: "/api/habit",
     method: "DELETE",
+    token,
     body: {
       habit_id: habit.id,
     },
@@ -45,6 +47,7 @@ export async function editHabitTitle(
   habit: Habit | undefined,
   habits: Habit[],
   toast: any,
+  token: string,
   setStatus: Dispatch<
     SetStateAction<"idle" | "updating" | "deleting" | "error">
   >,
@@ -53,6 +56,7 @@ export async function editHabitTitle(
   const data = await fetcher({
     url: "/api/habit",
     method: "PUT",
+    token,
     body: {
       title,
       habit_id: habit?.id,

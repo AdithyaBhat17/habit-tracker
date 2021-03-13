@@ -6,7 +6,7 @@ import { fetcher } from "../lib/fetcher";
 import { theme } from "../styles/theme";
 import { Habit } from "../types/habit";
 
-function AddHabit() {
+function AddHabit({ user }: { user?: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -28,11 +28,14 @@ function AddHabit() {
           const data = await fetcher({
             url: "/api/habit",
             body: { title: habit.value },
+            token: user,
           });
           setLoading(false);
           if (data.id) {
             formRef.current?.reset();
             return [data, ...habits];
+          } else {
+            setError(data.message);
           }
           return habits;
         },
