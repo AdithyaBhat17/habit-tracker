@@ -67,7 +67,7 @@ export default async function habit(req: NextApiRequest, res: NextApiResponse) {
 
       // reset the current streak if user failed to track a habit within 24 hours.
       if (isStreakBroken) {
-        currentStreak = 0;
+        currentStreak = 1;
       } else {
         currentStreak += 1;
         // keep the currentStreak and longestStreak in sync if user's current streak is

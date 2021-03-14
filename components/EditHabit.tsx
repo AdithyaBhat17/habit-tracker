@@ -71,6 +71,7 @@ function EditHabit({ isOpen, close, size, habit, user = "" }: EditHabitProps) {
       "/api/habits",
       async (habits: Habit[]) => {
         setStatus("deleting");
+        // @todo replace these arguments with a single object argument.
         return await deleteHabit(habit, habits, toast, user, close, setStatus);
       },
       false
