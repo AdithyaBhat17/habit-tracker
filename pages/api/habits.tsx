@@ -10,6 +10,22 @@ export default async function habits(
     return res.status(401).json({ message: "Failed to fetch habits" });
   }
   try {
+    // call the stored procedure that resets broken streaks for a particular user.
+    const { data: rpcData, error: rpcError } = await supabase.rpc(
+      "reset_current_streak1",
+      {
+        userid: user_id,
+      }
+    );
+
+    if (rpcError) {
+      console.error("Error running stored procedure", rpcError);
+    }
+
+    if (rpcData) {
+      console.log(`Woah, someone broke their streak 🤨`);
+    }
+
     let { data: habits, error } = await supabase
       .from("habits")
       .select("id, title, currentStreak, longestStreak, lastTrackedDate")
