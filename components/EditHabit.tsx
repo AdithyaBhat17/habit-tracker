@@ -11,7 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/modal";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, createRef, FormEvent, useEffect, useState } from "react";
 import OutlineButton from "./Buttons/OutlineButton";
 import PrimaryButton from "./Buttons/PrimaryButton";
 import { EditHabitProps, Habit } from "../types/habit";
@@ -26,7 +26,7 @@ function EditHabit({ isOpen, close, size, habit, user = "" }: EditHabitProps) {
     "idle" | "updating" | "deleting" | "error"
   >("idle");
   const [isNotMobile] = useMediaQuery("(min-width:500px)");
-  const outlineButton = useRef<HTMLButtonElement>();
+  const outlineButton = createRef<HTMLButtonElement>();
 
   let [title, setTitle] = useState("");
 
