@@ -38,6 +38,7 @@ function HabitsList({ user }: { user?: string }) {
         )
         .map((habit) => (
           <Habit
+            user={user}
             key={habit.id}
             onSelect={() => selectHabit(habit)}
             habit={habit}

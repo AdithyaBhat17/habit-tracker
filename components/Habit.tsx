@@ -1,15 +1,35 @@
 import { Flex, Stack, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { SyntheticEvent, useState } from "react";
+import { mutate } from "swr";
 import { Habit as HabitType } from "../types/habit";
+import { trackHabit } from "../utils/habit";
 import PrimaryButton from "./Buttons/PrimaryButton";
 import StreakTag from "./StreakTag";
 
 interface HabitProps {
   habit: HabitType;
   onSelect: () => void;
+  user?: string;
 }
 
-function Habit({ habit, onSelect }: HabitProps) {
+function Habit({ habit, user, onSelect }: HabitProps) {
+  const [loading, setLoading] = useState(false);
+
+  async function track(event: SyntheticEvent<HTMLButtonElement>) {
+    event.stopPropagation();
+    mutate(
+      "/api/habits",
+      async (habits: HabitType[]) => {
+        setLoading(true);
+        const updatedHabits = await trackHabit(habit, user, habits);
+        setLoading(false);
+        console.log(updatedHabits, habits);
+        return updatedHabits;
+      },
+      false
+    );
+  }
+
   return (
     <Flex
       cursor="pointer"
@@ -32,7 +52,9 @@ function Habit({ habit, onSelect }: HabitProps) {
         </Text>
         <StreakTag currentStreak={habit.currentStreak} />
       </Stack>
-      <PrimaryButton>Track</PrimaryButton>
+      <PrimaryButton isLoading={loading} isDisabled={loading} onClick={track}>
+        Track
+      </PrimaryButton>
     </Flex>
   );
 }

@@ -1,11 +1,7 @@
 export type Habit = {
   id: string;
   title: string;
-  user: {
-    _id: string;
-    name: string;
-    email: string;
-  };
+  lastTrackedDate: string;
   currentStreak: number;
   longestStreak: number;
 };
