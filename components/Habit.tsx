@@ -23,7 +23,6 @@ function Habit({ habit, user, onSelect }: HabitProps) {
         setLoading(true);
         const updatedHabits = await trackHabit(habit, user, habits);
         setLoading(false);
-        console.log(updatedHabits, habits);
         return updatedHabits;
       },
       false
