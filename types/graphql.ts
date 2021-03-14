@@ -8,11 +8,6 @@ export type HabitsResponse = {
   id: string;
   title: string;
   lastTrackedDate: string;
-  user: {
-    _id: string;
-    name: string;
-    email: string;
-  };
   currentStreak: number;
   longestStreak: number;
 }[];
