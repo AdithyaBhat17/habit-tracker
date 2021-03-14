@@ -53,20 +53,30 @@ export default async function habit(req: NextApiRequest, res: NextApiResponse) {
     res.status(200).json(deletedRow);
   } else if (req.method === "PUT") {
     const title = req.body.title;
+    // the below streak and date values are only sent when user is
+    // manually tracking their habits.
     let currentStreak = req.body.currentStreak;
     let longestStreak = req.body.longestStreak;
     let lastTrackedDate = req.body.lastTrackedDate;
-    if (currentStreak && longestStreak) {
+    if (currentStreak !== undefined && longestStreak !== undefined) {
       // check if user failed to track habit within 24 hours.
+      let lastTrackedAt = new Date(lastTrackedDate).getTime();
+      let currentTime = new Date().getTime();
+      const isStreakBroken =
+        Math.abs(lastTrackedAt - currentTime) > 24 * 60 * 60 * 1000;
+
       // reset the current streak if user failed to track a habit within 24 hours.
-      if (Date.parse(lastTrackedDate) - 24 * 60 * 60 * 100 > Date.now()) {
+      if (isStreakBroken) {
         currentStreak = 0;
       } else {
         currentStreak += 1;
+        // keep the currentStreak and longestStreak in sync if user's current streak is
+        // greater than the longestStreak.
         if (currentStreak > longestStreak) {
           longestStreak = currentStreak;
         }
       }
+      // update the lastTrackedDate to current timestamp.
       lastTrackedDate = new Date().toISOString().replace("Z", "");
     }
     const { data, error } = await supabase

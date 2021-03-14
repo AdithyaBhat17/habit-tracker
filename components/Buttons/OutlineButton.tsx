@@ -1,20 +1,19 @@
-import { Button } from "@chakra-ui/button";
-import { ButtonProps } from "./PrimaryButton";
+import { Button, ButtonProps } from "@chakra-ui/button";
+import { forwardRef } from "@chakra-ui/react";
 
-function OutlineButton({ children, ...props }: ButtonProps) {
+const OutlineButton = forwardRef<ButtonProps, "button">((props, ref) => {
   return (
-    <div>
-      <Button
-        variant="outline"
-        color="imperialRed"
-        border="2px solid"
-        borderColor="imperialRed"
-        {...props}
-      >
-        {children}
-      </Button>
-    </div>
+    <Button
+      ref={ref}
+      variant="outline"
+      color="imperialRed"
+      border="2px solid"
+      borderColor="imperialRed"
+      {...props}
+    >
+      {props.children}
+    </Button>
   );
-}
+});
 
 export default OutlineButton;
